@@ -14,5 +14,6 @@ ext {
             retrofit_converter: 'com.squareup.retrofit2:converter-gson:2.3.0',
             retrofit_adapter  : 'com.squareup.retrofit2:adapter-rxjava2:2.3.0',
             logger            : 'com.orhanobut:logger:2.1.1',
+            design            : 'com.android.support:design:27.+'
     ]
 }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
@@ -40,6 +41,9 @@ class MainActivity : AppCompatActivity() {
         btn_create.setOnClickListener {
             createAccount(et_email.text.toString(), et_password.text.toString())
         }
+        btn_login.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
         btn_signIn.setOnClickListener {
             signIn(et_email.text.toString(), et_password.text.toString())
         }
@@ -47,10 +51,20 @@ class MainActivity : AppCompatActivity() {
             mAuth.signOut()
         }
         btn_database.setOnClickListener {
-            startActivity(Intent(this,DatabaseActivity::class.java))
+            startActivity(Intent(this, DatabaseActivity::class.java))
         }
-        btn_storage.setOnClickListener{
-            startActivity(Intent(this,StorageActivity::class.java))
+        btn_storage.setOnClickListener {
+            startActivity(Intent(this, StorageActivity::class.java))
+        }
+
+        var viewList = arrayListOf(View(this), View(this), View(this))
+        var adapter = MainViewPagerAdapter(this,viewList)
+        viewpager.adapter = adapter
+
+        tab_layout.setupWithViewPager(viewpager)
+        for (i in 0 until tab_layout.tabCount) {
+            val tab = tab_layout.getTabAt(i)
+            tab?.customView = adapter.getTabView(i)
         }
     }
 

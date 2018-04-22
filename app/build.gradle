@@ -37,6 +37,7 @@ dependencies {
     implementation libraries.retrofit_adapter
     implementation libraries.retrofit_converter
     implementation libraries.logger
+    implementation libraries.design
 
     implementation 'com.google.firebase:firebase-core:11.4.2'
     implementation 'com.google.firebase:firebase-auth:11.4.2'
