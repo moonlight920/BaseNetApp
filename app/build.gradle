@@ -3,12 +3,15 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 
+def config = rootProject.ext.android
+def libraries = rootProject.ext.dependencies
+
 android {
-    compileSdkVersion 26
+    compileSdkVersion config.compileSdkVersion
     defaultConfig {
         applicationId "com.moonlight.chatapp"
-        minSdkVersion 19
-        targetSdkVersion 26
+        minSdkVersion config.minSdkVersion
+        targetSdkVersion config.targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -24,19 +27,16 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.0.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.0'
-    implementation 'com.orhanobut:logger:2.1.1'
+    implementation libraries.supportv7
+    implementation libraries.supportv4
+    implementation libraries.rxjava
+    implementation libraries.rxandroid
+    implementation libraries.retrofit
+    implementation libraries.retrofit_adapter
+    implementation libraries.retrofit_converter
+    implementation libraries.logger
 
     implementation 'com.google.firebase:firebase-core:11.4.2'
     implementation 'com.google.firebase:firebase-auth:11.4.2'
