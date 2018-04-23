@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.moonlight.chatapp.home.HomeFragmentPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -57,8 +58,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, StorageActivity::class.java))
         }
 
-        var viewList = arrayListOf(View(this), View(this), View(this))
-        var adapter = MainViewPagerAdapter(this,viewList)
+        var adapter = HomeFragmentPagerAdapter(this,supportFragmentManager)
         viewpager.adapter = adapter
 
         tab_layout.setupWithViewPager(viewpager)
