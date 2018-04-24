@@ -25,6 +25,7 @@
         <activity android:name=".DatabaseActivity" />
         <activity android:name=".StorageActivity" />
         <activity android:name=".LoginActivity" />
+        <activity android:name=".FirebaseActivity"></activity>
     </application>
 
 </manifest>
