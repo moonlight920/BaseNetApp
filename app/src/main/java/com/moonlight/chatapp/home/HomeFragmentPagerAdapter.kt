@@ -2,10 +2,10 @@ package com.moonlight.chatapp.home
 
 import android.content.Context
 import android.graphics.Color
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import com.moonlight.chatapp.R
@@ -16,7 +16,8 @@ import com.moonlight.chatapp.R
  */
 class HomeFragmentPagerAdapter(private var mContext: Context, fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-    private var colorList = arrayOf(Color.BLUE, Color.GREEN, Color.GRAY)
+    private var colorList = arrayOf(Color.BLUE)
+//    private var colorList = arrayOf(Color.BLUE, Color.GREEN, Color.GRAY)
 
     /**
      * 根据id生成fragment，写好这个就好了

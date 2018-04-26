@@ -1,5 +1,6 @@
 package com.moonlight.chatapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -110,6 +111,6 @@ class RegisterActivity : BaseActivity() {
     }
 
     private fun registerSuccess() {
-
+        startActivity(Intent(this, MainActivity::class.java))
     }
 }

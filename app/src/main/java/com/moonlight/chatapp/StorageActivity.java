@@ -178,7 +178,6 @@ public class StorageActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {

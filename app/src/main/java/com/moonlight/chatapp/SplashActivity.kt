@@ -35,9 +35,6 @@ class SplashActivity : BaseActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
             startActivity(Intent(this, MainActivity::class.java))
-
-            val intent = Intent(this, UploadImgService::class.java)
-            startService(intent)
         }
         finish()
     }

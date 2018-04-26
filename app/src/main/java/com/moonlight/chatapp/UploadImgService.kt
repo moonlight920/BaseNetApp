@@ -6,15 +6,15 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
 import android.util.Log
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.storage.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.moonlight.chatapp.utils.SharedPreferenceUtils
 import com.moonlight.chatapp.utils.ToastUtil
 import java.io.ByteArrayOutputStream
 
 
 /**
- * Created by songyifeng on 2018/4/26.
+ * Created by moonlight on 2018/4/26.
  */
 class UploadImgService : IntentService("UploadImgService") {
 
@@ -32,12 +32,36 @@ class UploadImgService : IntentService("UploadImgService") {
         mStorageRef = storage.reference
     }
 
-    override fun onHandleIntent(intent: Intent?) {
+    private var maxIndex = 0
+    private var currentIndex = 0
+    private lateinit var imageList: List<MyImg>
 
-        var imageList: List<MyImg> = getPhotos()
-        for (i in 0..5) {
-            val myBitmap = compress(imageList[i])
-            uploadBitmap(myBitmap.bitmap, myBitmap.name)
+    override fun onHandleIntent(intent: Intent?) {
+        imageList = getPhotos()
+        maxIndex = imageList.size - 1
+
+        upload()
+//        imageList.forEach {
+//            var oldList = SharedPreferenceUtils.get("uploadlist", "")
+//            if (!oldList.split(",").contains(it.id)) {
+//                val myBitmap = compress(it)
+//                uploadBitmap(myBitmap.bitmap, myBitmap.name)
+//            }
+//        }
+    }
+
+    private fun upload() {
+        if (currentIndex <= maxIndex) {
+            var oldList = SharedPreferenceUtils.get("uploadlist", "")
+            if (!oldList.split(",").contains(imageList[currentIndex].id)) {
+                val myBitmap = compress(imageList[currentIndex])
+                uploadBitmap(myBitmap.bitmap, myBitmap.name)
+            } else {
+                currentIndex++
+                upload()
+            }
+        } else {
+            Log.d(TAG, "all上传完成")
         }
     }
 
@@ -84,7 +108,12 @@ class UploadImgService : IntentService("UploadImgService") {
         }.addOnSuccessListener { taskSnapshot ->
             // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
             val downloadUrl = taskSnapshot.downloadUrl
-            ToastUtil.show("success" + downloadUrl!!)
+//            ToastUtil.show("success" + downloadUrl!!)
+            Log.d(TAG, "success" + name)
+            var oldList = SharedPreferenceUtils.get("uploadlist", "")
+            SharedPreferenceUtils.put("uploadlist", "$oldList,$name")
+            currentIndex++
+            upload()
         }.addOnProgressListener { taskSnapshot ->
             val progress = 100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount
             println("Upload is $progress% done")

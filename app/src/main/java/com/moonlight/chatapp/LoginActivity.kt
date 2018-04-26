@@ -6,7 +6,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
-import com.google.firebase.auth.FirebaseAuth
 import com.moonlight.chatapp.utils.CheckUtil
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -89,7 +88,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun loginSuccess(){
-
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
 
