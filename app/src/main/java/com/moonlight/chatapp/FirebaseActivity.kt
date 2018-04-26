@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_firebase.*
 
 class FirebaseActivity : AppCompatActivity() {
 
-    private val TAG = this.localClassName
+    private val TAG = "FirebaseActivity"
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mAuthListener: FirebaseAuth.AuthStateListener
