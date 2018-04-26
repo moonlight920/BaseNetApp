@@ -4,18 +4,27 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.EditText
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 
 
+class LoginActivity : BaseActivity() {
 
-class LoginActivity : AppCompatActivity() {
+    val TAG: String = "LoginActivity"
+
+    private lateinit var mAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        var editTextUsername:EditText = til_username.editText!!
+        mAuth = FirebaseAuth.getInstance()
+    }
+
+    override fun initViewData() {
+        var editTextUsername: EditText = til_username.editText!!
         til_username.hint = "UserName"
         editTextUsername.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -36,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        var editTextPwd:EditText = til_pwd.editText!!
+        var editTextPwd: EditText = til_pwd.editText!!
         til_pwd.hint = "Password"
         editTextPwd.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {

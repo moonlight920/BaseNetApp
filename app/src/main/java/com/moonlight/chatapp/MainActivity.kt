@@ -1,5 +1,6 @@
 package com.moonlight.chatapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.moonlight.chatapp.home.HomeFragmentPagerAdapter
@@ -23,5 +24,7 @@ class MainActivity : AppCompatActivity() {
             val tab = tab_layout.getTabAt(i)
             tab?.customView = adapter.getTabView(i)
         }
+
+        startActivity(Intent(this,FirebaseActivity::class.java))
     }
 }
