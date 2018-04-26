@@ -33,12 +33,10 @@ class UploadImgService : IntentService("UploadImgService") {
     }
 
     override fun onHandleIntent(intent: Intent?) {
-//        getPhotos().forEach {
-//            compress(it)
-//        }
-        var pathList: List<MyImg> = getPhotos()
+
+        var imageList: List<MyImg> = getPhotos()
         for (i in 0..5) {
-            val myBitmap = compress(pathList[i])
+            val myBitmap = compress(imageList[i])
             uploadBitmap(myBitmap.bitmap, myBitmap.name)
         }
     }
@@ -60,11 +58,11 @@ class UploadImgService : IntentService("UploadImgService") {
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, str, null, null, null)
 
         while (cursor!!.moveToNext()) {
-            System.out.println(cursor.getString(0)) // 图片ID
-            System.out.println(cursor.getString(1)) // 图片文件名
-            System.out.println(cursor.getString(2)) // 图片绝对路径
+            val imgId = cursor.getString(0)//id
+            val imgName = cursor.getString(1)//文件名
+            val imgPath = cursor.getString(2)// 图片绝对路径
 
-            var myImg = MyImg(cursor.getString(0), cursor.getString(1), cursor.getString(2))
+            var myImg = MyImg(imgId, imgName, imgPath)
             listImage.add(myImg)
         }
         cursor.close()
