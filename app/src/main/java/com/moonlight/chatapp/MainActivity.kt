@@ -25,6 +25,6 @@ class MainActivity : AppCompatActivity() {
             tab?.customView = adapter.getTabView(i)
         }
 
-        startActivity(Intent(this,FirebaseActivity::class.java))
+//        startActivity(Intent(this,FirebaseActivity::class.java))
     }
 }

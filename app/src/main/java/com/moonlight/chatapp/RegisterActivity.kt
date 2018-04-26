@@ -1,21 +1,19 @@
 package com.moonlight.chatapp
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
-import com.google.firebase.auth.FirebaseAuth
 import com.moonlight.chatapp.utils.CheckUtil
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_register.*
 
+class RegisterActivity : BaseActivity() {
 
-class LoginActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_register)
     }
 
     override fun initViewData() {
@@ -61,36 +59,57 @@ class LoginActivity : BaseActivity() {
             }
         })
 
-        btn_login.setOnClickListener {
+        var editTextConfirmPwd: EditText = til_confirm_pwd.editText!!
+        til_confirm_pwd.hint = "Confirm Password"
+        editTextConfirmPwd.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                val pwd = editTextPwd.text.toString()
+                if (s.isNotEmpty() && s.length < 6 && pwd != s) {
+                    til_confirm_pwd.error = "Invalid password"
+                    til_confirm_pwd.isErrorEnabled = true
+                } else {
+                    til_confirm_pwd.isErrorEnabled = false
+                }
+            }
+
+            override fun afterTextChanged(s: Editable) {
+
+            }
+        })
+
+        btn_register.setOnClickListener {
             val email = editTextUsername.text.toString()
             val pwd = CheckUtil.md5Encode(editTextPwd.text.toString())
-            signIn(email,pwd)
-        }
-        btn_to_register.setOnClickListener {
-            startActivity(Intent(this, RegisterActivity::class.java))
+            if (email.isNotEmpty() && pwd.isNotEmpty() &&
+                    !til_username.isErrorEnabled && !til_pwd.isErrorEnabled && !til_confirm_pwd.isErrorEnabled) {
+                createAccount(email, pwd)
+            }else{
+                toast("check text")
+            }
         }
     }
 
-    private fun signIn(email: String, password: String) {
-        mAuth.signInWithEmailAndPassword(email, password)
+    private fun createAccount(email: String, password: String) {
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithEmail:success")
-                        val user = mAuth.currentUser
-                        toast("Authentication success.")
-                        loginSuccess()
+                        Log.d(TAG, "createUserWithEmail:success")
+                        toast("createUserWithEmail:success")
+                        registerSuccess()
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail:failure", task.exception)
+                        Log.w(TAG, "createUserWithEmail:failure", task.exception)
                         toast("Authentication failed.")
                     }
                 }
     }
 
-    private fun loginSuccess(){
+    private fun registerSuccess() {
 
     }
-
-
 }

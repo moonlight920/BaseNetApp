@@ -10,11 +10,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_firebase.*
 
-class FirebaseActivity : AppCompatActivity() {
+class FirebaseActivity : BaseActivity() {
 
-    private val TAG = "FirebaseActivity"
-
-    private lateinit var mAuth: FirebaseAuth
     private lateinit var mAuthListener: FirebaseAuth.AuthStateListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,5 +103,4 @@ class FirebaseActivity : AppCompatActivity() {
             tv_username.text = it.email
         }
     }
-    fun Context.toast(text:String){ Toast.makeText(this,text,Toast.LENGTH_SHORT).show()}
 }
