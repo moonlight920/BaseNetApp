@@ -29,8 +29,9 @@
         <activity android:name=".StorageActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".FirebaseActivity" />
-        <activity android:name=".LoadPhotoActivity" />
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity" />
+
+        <service android:name=".UploadImgService" />
     </application>
 
 </manifest>
