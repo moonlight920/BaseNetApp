@@ -6,12 +6,13 @@ import android.support.v7.app.AppCompatActivity
 import cn.jzvd.JZVideoPlayer
 import com.moonlight.chatapp.home.HomeFragmentPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
+import android.content.ComponentName
+import android.app.ActivityManager
+import android.content.Context
+import android.content.Context.ACTIVITY_SERVICE
 
 
-class MainActivity : AppCompatActivity() {
-
-    val TAG: String = "MainActivity"
-
+class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,12 +28,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         val intent = Intent(this, UploadImgService::class.java)
+        intent.putExtra("username", mAuth.currentUser!!.uid)
         startService(intent)
-//        startActivity(Intent(this,FirebaseActivity::class.java))
+
     }
 
     override fun onPause() {
         super.onPause()
         JZVideoPlayer.releaseAllVideos()
     }
+
 }

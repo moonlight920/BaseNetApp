@@ -16,8 +16,8 @@ import com.moonlight.chatapp.R
  */
 class HomeFragmentPagerAdapter(private var mContext: Context, fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-    private var colorList = arrayOf(Color.BLUE)
-//    private var colorList = arrayOf(Color.BLUE, Color.GREEN, Color.GRAY)
+//    private var colorList = arrayOf(Color.BLUE)
+    private var colorList = arrayOf(Color.BLUE, Color.GREEN, Color.GRAY)
 
     /**
      * 根据id生成fragment，写好这个就好了

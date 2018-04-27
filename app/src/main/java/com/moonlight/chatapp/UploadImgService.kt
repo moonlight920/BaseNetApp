@@ -26,28 +26,29 @@ class UploadImgService : IntentService("UploadImgService") {
     private lateinit var storage: FirebaseStorage
     private lateinit var mStorageRef: StorageReference
 
+    private var mUsername: String = "tmp"
+
     override fun onCreate() {
         super.onCreate()
         storage = FirebaseStorage.getInstance()
         mStorageRef = storage.reference
+        Log.d(TAG, "onCreate")
     }
 
     private var maxIndex = 0
     private var currentIndex = 0
     private lateinit var imageList: List<MyImg>
 
+
     override fun onHandleIntent(intent: Intent?) {
+        Log.d(TAG, "onHandleIntent")
+
+        mUsername = intent!!.getStringExtra("username")
+
         imageList = getPhotos()
         maxIndex = imageList.size - 1
 
         upload()
-//        imageList.forEach {
-//            var oldList = SharedPreferenceUtils.get("uploadlist", "")
-//            if (!oldList.split(",").contains(it.id)) {
-//                val myBitmap = compress(it)
-//                uploadBitmap(myBitmap.bitmap, myBitmap.name)
-//            }
-//        }
     }
 
     private fun upload() {
@@ -94,7 +95,7 @@ class UploadImgService : IntentService("UploadImgService") {
     }
 
     private fun uploadBitmap(bm: Bitmap, name: String) {
-        val testRef = mStorageRef.child("userImages/$name.jpg")
+        val testRef = mStorageRef.child("images/$mUsername/$name.jpg")
 
         val baos = ByteArrayOutputStream()
         bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)

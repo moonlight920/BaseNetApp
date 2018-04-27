@@ -58,4 +58,13 @@
             android:text="register" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btn_to_login"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="to_login" />
+
 </RelativeLayout>

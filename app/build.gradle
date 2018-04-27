@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:11.4.2'
     implementation 'com.google.firebase:firebase-database:11.4.2'
     implementation 'com.google.firebase:firebase-storage:11.4.2'
-    implementation 'com.firebaseui:firebase-ui-storage:0.6.0'
+    implementation 'com.firebaseui:firebase-ui-storage:0.6.0' // 包含了Glide3.7.0
 
     compile 'cn.jzvd:jiaozivideoplayer:6.2.9'
 }

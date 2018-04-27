@@ -92,6 +92,10 @@ class RegisterActivity : BaseActivity() {
                 toast("check text")
             }
         }
+        btn_to_login.setOnClickListener {
+            startActivity(Intent(this,LoginActivity::class.java))
+            finish()
+        }
     }
 
     private fun createAccount(email: String, password: String) {
@@ -112,5 +116,6 @@ class RegisterActivity : BaseActivity() {
 
     private fun registerSuccess() {
         startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }

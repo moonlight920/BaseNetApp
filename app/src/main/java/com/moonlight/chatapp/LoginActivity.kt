@@ -19,7 +19,7 @@ class LoginActivity : BaseActivity() {
 
     override fun initViewData() {
         var editTextUsername: EditText = til_username.editText!!
-        til_username.hint = "UserName"
+        til_username.hint = "UserName(Email)"
         editTextUsername.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
@@ -63,10 +63,11 @@ class LoginActivity : BaseActivity() {
         btn_login.setOnClickListener {
             val email = editTextUsername.text.toString()
             val pwd = CheckUtil.md5Encode(editTextPwd.text.toString())
-            signIn(email,pwd)
+            signIn(email, pwd)
         }
         btn_to_register.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
+            finish()
         }
     }
 
@@ -87,8 +88,9 @@ class LoginActivity : BaseActivity() {
                 }
     }
 
-    private fun loginSuccess(){
+    private fun loginSuccess() {
         startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 
 
