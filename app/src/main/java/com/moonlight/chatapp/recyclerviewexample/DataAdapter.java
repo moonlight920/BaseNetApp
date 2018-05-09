@@ -11,29 +11,28 @@ import android.widget.Toast;
 
 import com.moonlight.chatapp.R;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
 
 /**
  * Created by songyifeng on 2018/5/9.
  */
 
-public class DataAdapter extends RecyclerView.Adapter {
-    private final int VIEW_STUDENT = 1;
-    private final int VIEW_TEACHER = 2;
-    private final int VIEW_PROG = 0;
+public class DataAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder> {
+    private final int VIEW_PROG = -1;
 
-    private List<Person> personList;
+    private List<BaseListItemBean> mList;
 
     // The minimum amount of items to have below your current scroll position
-// before loading more.
+    // before loading more.
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
 
 
-    public DataAdapter(List<Person> person, RecyclerView recyclerView) {
-        personList = person;
+    public DataAdapter(List<BaseListItemBean> list, RecyclerView recyclerView) {
+        mList = list;
 
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
 
@@ -66,52 +65,40 @@ public class DataAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
 
-        if (personList.get(position) == null)
+        if (mList.get(position) == null)
             return VIEW_PROG;
-        if (personList.get(position) instanceof Student)
-            return VIEW_STUDENT;
-        if (personList.get(position) instanceof Teacher)
-            return VIEW_TEACHER;
-
-        return VIEW_STUDENT;
+        else
+            return UIType.getTypeByCode(mList.get(position).getTypeCode());
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                      int viewType) {
-        RecyclerView.ViewHolder vh;
-        if (viewType == VIEW_STUDENT) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.item_student, parent, false);
-
-            vh = new StudentViewHolder(v);
-        } else if (viewType == VIEW_TEACHER) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.item_teacher, parent, false);
-            vh = new TeacherViewHolder(v);
-        } else {
-            View v = LayoutInflater.from(parent.getContext()).inflate(
+    public BaseRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        BaseRecyclerViewHolder vh;
+        View v;
+        if (viewType == VIEW_PROG) {
+            v = LayoutInflater.from(parent.getContext()).inflate(
                     R.layout.progressbar, parent, false);
-
             vh = new ProgressViewHolder(v);
+        } else {
+            v = LayoutInflater.from(parent.getContext()).inflate(UIType.getLayoutByCode(viewType), parent, false);
+            Class clazz = UIType.getClazzByCode(viewType);
+            try {
+                Constructor c = clazz.getConstructor(View.class);
+                vh = (BaseRecyclerViewHolder) c.newInstance(v);
+            } catch (Exception e) {
+                e.printStackTrace();
+                vh = null;
+            }
         }
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof StudentViewHolder) {
-            Student singleStudent = (Student) personList.get(position);
-            ((StudentViewHolder) holder).tvName.setText(singleStudent.getName());
-            ((StudentViewHolder) holder).tvEmailId.setText(singleStudent.getEmailId());
-            ((StudentViewHolder) holder).student = singleStudent;
-        } else if (holder instanceof TeacherViewHolder) {
-            Teacher singleTeacher = (Teacher) personList.get(position);
-            ((TeacherViewHolder) holder).tvName.setText(singleTeacher.getName());
-            ((TeacherViewHolder) holder).tvEmailId.setText(singleTeacher.getEmailId());
-            ((TeacherViewHolder) holder).teacher = singleTeacher;
-        } else {
+    public void onBindViewHolder(BaseRecyclerViewHolder holder, int position) {
+        if (holder instanceof ProgressViewHolder) {
             ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
+        } else {
+            holder.showData(mList.get(position));
         }
     }
 
@@ -121,72 +108,24 @@ public class DataAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return personList.size();
+        return mList.size();
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
         this.onLoadMoreListener = onLoadMoreListener;
     }
 
-
-    public static class TeacherViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvName;
-
-        public TextView tvEmailId;
-
-        public Teacher teacher;
-
-        public TeacherViewHolder(View v) {
-            super(v);
-            tvName = v.findViewById(R.id.tvName);
-
-            tvEmailId = v.findViewById(R.id.tvEmailId);
-
-            v.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(),
-                            "OnClick :" + teacher.getName() + " \n " + teacher.getEmailId(),
-                            Toast.LENGTH_SHORT).show();
-
-                }
-            });
-        }
-    }
-
-    public static class StudentViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvName;
-
-        public TextView tvEmailId;
-
-        public Student student;
-
-        public StudentViewHolder(View v) {
-            super(v);
-            tvName = v.findViewById(R.id.tvName);
-
-            tvEmailId = v.findViewById(R.id.tvEmailId);
-
-            v.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(),
-                            "OnClick :" + student.getName() + " \n " + student.getEmailId(),
-                            Toast.LENGTH_SHORT).show();
-
-                }
-            });
-        }
-    }
-
-    public static class ProgressViewHolder extends RecyclerView.ViewHolder {
+    public static class ProgressViewHolder extends BaseRecyclerViewHolder {
         public ProgressBar progressBar;
 
         public ProgressViewHolder(View v) {
             super(v);
             progressBar = v.findViewById(R.id.progressBar);
+        }
+
+        @Override
+        void showData(BaseListItemBean data) {
+
         }
     }
 }

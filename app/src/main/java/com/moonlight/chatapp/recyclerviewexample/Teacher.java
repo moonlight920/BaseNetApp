@@ -18,9 +18,10 @@ public class Teacher extends Person implements Serializable {
 
     }
 
-    public Teacher(String name, String emailId) {
+    public Teacher(String name, String emailId,String typeCode) {
         this.name = name;
         this.emailId = emailId;
+        this.typeCode = typeCode;
     }
 
     public String getName() {

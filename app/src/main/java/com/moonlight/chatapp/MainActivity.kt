@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: DataAdapter
     private var mLayoutManager: LinearLayoutManager? = null
-    private var personList = ArrayList<Person?>()
+    private var personList = ArrayList<BaseListItemBean?>()
     private var handler: Handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,9 +81,9 @@ class MainActivity : AppCompatActivity() {
                     val end = start + 20
                     for (i in start + 1..end) {
                         if (i % 2 == 1)
-                            personList.add(Student("Student $i", "AndroidStudent$i@gmail.com"))
+                            personList.add(createStudent(i))
                         else
-                            personList.add(Teacher("Teacher $i", "androidTeacher$i@gmail.com"))
+                            personList.add(createTeacher(i))
                         mAdapter.notifyItemInserted(personList.size)
                     }
                     mAdapter.setLoaded()
@@ -97,10 +97,18 @@ class MainActivity : AppCompatActivity() {
     private fun loadData() {
         for (i in 1..20) {
             if (i % 2 == 1)
-                personList.add(Student("Student $i", "androidStudent$i@gmail.com"))
+                personList.add(createStudent(i))
             else
-                personList.add(Teacher("Teacher $i", "androidTeacher$i@gmail.com"))
+                personList.add(createTeacher(i))
 
         }
+    }
+
+    private fun createStudent(number: Int): Student {
+        return Student("Student $number", "androidStudent$number@gmail.com", "student")
+    }
+
+    private fun createTeacher(number: Int): Teacher {
+        return Teacher("Teacher $number", "androidTeacher$number@gmail.com", "teacher")
     }
 }
