@@ -8,7 +8,7 @@ def libraries = rootProject.ext.dependencies
 android {
     compileSdkVersion config.compileSdkVersion
     defaultConfig {
-        applicationId "com.moonlight.chatapp"
+        applicationId "com.moonlight.baserecyclerview"
         minSdkVersion config.minSdkVersion
         targetSdkVersion config.targetSdkVersion
         versionCode 1
