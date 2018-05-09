@@ -37,4 +37,7 @@ dependencies {
     implementation libraries.retrofit_converter
     implementation libraries.logger
     implementation libraries.design
+    implementation libraries.cardview
+
+    compile 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 }
