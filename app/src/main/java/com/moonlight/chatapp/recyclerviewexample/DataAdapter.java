@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.moonlight.chatapp.R;
 
@@ -53,12 +51,25 @@ public class DataAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder> {
                                 // End has been reached
                                 // Do something
                                 if (onLoadMoreListener != null) {
+                                    //add null , so the adapter will check view_type and show progress bar at bottom
+                                    mList.add(null);
+                                    notifyItemInserted(mList.size() - 1);
                                     onLoadMoreListener.onLoadMore();
                                 }
                                 loading = true;
                             }
                         }
                     });
+        }
+    }
+
+    public void loadMoreFinish(List<BaseListItemBean> list){
+        //   remove progress item_student
+        mList.remove(mList.size() - 1);
+        notifyItemRemoved(mList.size());
+        setLoaded();
+        if (onLoadMoreListener != null) {
+            onLoadMoreListener.onLoadMoreFinish(list);
         }
     }
 

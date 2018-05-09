@@ -5,4 +5,5 @@ package com.moonlight.chatapp.recyclerviewexample
  */
 interface OnLoadMoreListener {
     fun onLoadMore()
+    fun onLoadMoreFinish(list:List<BaseListItemBean>?)
 }

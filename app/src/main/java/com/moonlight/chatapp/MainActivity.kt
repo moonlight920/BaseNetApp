@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvEmptyView: TextView
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: DataAdapter
-    private var mLayoutManager: LinearLayoutManager? = null
     private var personList = ArrayList<BaseListItemBean?>()
     private var handler: Handler = Handler()
 
@@ -37,16 +36,12 @@ class MainActivity : AppCompatActivity() {
         mRecyclerView = findViewById(R.id.recycler_view)
         tvEmptyView = findViewById(R.id.empty_view)
 
-        loadData()
-
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true)
 
-        mLayoutManager = LinearLayoutManager(this)
-
         // use a linear layout manager
-        mRecyclerView.layoutManager = mLayoutManager
+        mRecyclerView.layoutManager = LinearLayoutManager(this)
 
         // create an Object for Adapter
         mAdapter = DataAdapter(personList, mRecyclerView)
@@ -55,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         mRecyclerView.adapter = mAdapter
         //  mAdapter.notifyDataSetChanged();
 
-
+        personList.addAll(getData())
         if (personList.isEmpty()) {
             mRecyclerView.visibility = View.GONE
             tvEmptyView.visibility = View.VISIBLE
@@ -66,42 +61,33 @@ class MainActivity : AppCompatActivity() {
         }
 
         mAdapter.setOnLoadMoreListener(object : OnLoadMoreListener {
-            override fun onLoadMore() {
-                //add null , so the adapter will check view_type and show progress bar at bottom
-
-                personList.add(null)
-                mAdapter.notifyItemInserted(personList.size - 1)
-
-                handler.postDelayed({
-                    //   remove progress item_student
-                    personList.removeAt(personList.size - 1)
-                    mAdapter.notifyItemRemoved(personList.size)
+            override fun onLoadMoreFinish(list: List<BaseListItemBean>?) {
+                list?.forEach {
                     //add items one by one
-                    val start = personList.size
-                    val end = start + 20
-                    for (i in start + 1..end) {
-                        if (i % 2 == 1)
-                            personList.add(createStudent(i))
-                        else
-                            personList.add(createTeacher(i))
-                        mAdapter.notifyItemInserted(personList.size)
-                    }
-                    mAdapter.setLoaded()
+                    personList.add(it)
+                    mAdapter.notifyItemInserted(personList.size)
                     //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
+                }
+            }
+
+            override fun onLoadMore() {
+                handler.postDelayed({
+                    mAdapter.loadMoreFinish(getData())
                 }, 2000)
             }
         })
     }
 
     // load initial data
-    private fun loadData() {
+    private fun getData(): List<Person> {
+        var tmpList = ArrayList<Person>()
         for (i in 1..20) {
             if (i % 2 == 1)
-                personList.add(createStudent(i))
+                tmpList.add(createStudent(i))
             else
-                personList.add(createTeacher(i))
-
+                tmpList.add(createTeacher(i))
         }
+        return tmpList
     }
 
     private fun createStudent(number: Int): Student {
