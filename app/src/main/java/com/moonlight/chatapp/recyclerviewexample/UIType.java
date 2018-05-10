@@ -1,11 +1,10 @@
 package com.moonlight.chatapp.recyclerviewexample;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
 
 import com.moonlight.chatapp.R;
+import com.moonlight.chatapp.recyclerviewexample.holder.StudentHolder;
+import com.moonlight.chatapp.recyclerviewexample.holder.TeacherHolder;
 
 /**
  * Created by songyifeng on 2018/5/9.

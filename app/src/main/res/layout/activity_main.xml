@@ -8,7 +8,6 @@
     tools:context="com.moonlight.chatapp.MainActivity">
 
     <RelativeLayout
-        android:layout_marginBottom="100dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

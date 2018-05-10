@@ -1,4 +1,4 @@
-package com.moonlight.chatapp.recyclerviewexample;
+package com.moonlight.chatapp.recyclerviewexample.base;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.moonlight.chatapp.R;
+import com.moonlight.chatapp.recyclerviewexample.UIType;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
  * Created by songyifeng on 2018/5/9.
  */
 
-public class DataAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder> {
+public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder> {
     private final int VIEW_PROG = -1;
 
     private List<BaseListItemBean> mList;
@@ -28,43 +29,42 @@ public class DataAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder> {
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
 
-
-    public DataAdapter(List<BaseListItemBean> list, RecyclerView recyclerView) {
+    public BaseRecyclerViewAdapter(List<BaseListItemBean> list, RecyclerView recyclerView) {
         mList = list;
-
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
-
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView
                     .getLayoutManager();
-
-
             recyclerView
                     .addOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override
                         public void onScrolled(RecyclerView recyclerView,
                                                int dx, int dy) {
                             super.onScrolled(recyclerView, dx, dy);
-
-                            totalItemCount = linearLayoutManager.getItemCount();
-                            lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                            if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-                                // End has been reached
-                                // Do something
-                                if (onLoadMoreListener != null) {
-                                    //add null , so the adapter will check view_type and show progress bar at bottom
-                                    mList.add(null);
-                                    notifyItemInserted(mList.size() - 1);
-                                    onLoadMoreListener.onLoadMore();
+                            if (isAllowLoadMore()) {
+                                totalItemCount = linearLayoutManager.getItemCount();
+                                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                                if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                                    // End has been reached
+                                    // Do something
+                                    if (onLoadMoreListener != null) {
+                                        //add null , so the adapter will check view_type and show progress bar at bottom
+                                        mList.add(null);
+                                        notifyItemInserted(mList.size() - 1);
+                                        onLoadMoreListener.onLoadMore();
+                                    }
+                                    loading = true;
                                 }
-                                loading = true;
                             }
                         }
                     });
         }
     }
 
-    public void loadMoreFinish(List<BaseListItemBean> list){
-        //   remove progress item_student
+    // 是否允许加载更多
+    protected abstract boolean isAllowLoadMore();
+
+    public void loadMoreFinish(List<BaseListItemBean> list) {
+        //  remove progress item_student
         mList.remove(mList.size() - 1);
         notifyItemRemoved(mList.size());
         setLoaded();
@@ -75,7 +75,6 @@ public class DataAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-
         if (mList.get(position) == null)
             return VIEW_PROG;
         else
@@ -135,7 +134,7 @@ public class DataAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder> {
         }
 
         @Override
-        void showData(BaseListItemBean data) {
+        public void showData(BaseListItemBean data) {
 
         }
     }

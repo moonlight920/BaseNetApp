@@ -7,14 +7,20 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
-import com.moonlight.chatapp.recyclerviewexample.*
+import com.moonlight.chatapp.recyclerviewexample.adapter.MyMainAdapter
+import com.moonlight.chatapp.recyclerviewexample.base.BaseListItemBean
+import com.moonlight.chatapp.recyclerviewexample.base.BaseRecyclerViewAdapter
+import com.moonlight.chatapp.recyclerviewexample.base.OnLoadMoreListener
+import com.moonlight.chatapp.recyclerviewexample.bean.Person
+import com.moonlight.chatapp.recyclerviewexample.bean.Student
+import com.moonlight.chatapp.recyclerviewexample.bean.Teacher
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var tvEmptyView: TextView
     private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mAdapter: DataAdapter
+    private lateinit var mAdapter: BaseRecyclerViewAdapter
     private var personList = ArrayList<BaseListItemBean?>()
     private var handler: Handler = Handler()
 
@@ -44,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         mRecyclerView.layoutManager = LinearLayoutManager(this)
 
         // create an Object for Adapter
-        mAdapter = DataAdapter(personList, mRecyclerView)
+        mAdapter = MyMainAdapter(personList, mRecyclerView)
 
         // set the adapter object to the Recyclerview
         mRecyclerView.adapter = mAdapter
@@ -61,6 +67,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         mAdapter.setOnLoadMoreListener(object : OnLoadMoreListener {
+            override fun onLoadMore() {
+                handler.postDelayed({
+                    mAdapter.loadMoreFinish(getData())
+                }, 2000)
+            }
+
             override fun onLoadMoreFinish(list: List<BaseListItemBean>?) {
                 list?.forEach {
                     //add items one by one
@@ -68,12 +80,6 @@ class MainActivity : AppCompatActivity() {
                     mAdapter.notifyItemInserted(personList.size)
                     //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
                 }
-            }
-
-            override fun onLoadMore() {
-                handler.postDelayed({
-                    mAdapter.loadMoreFinish(getData())
-                }, 2000)
             }
         })
     }

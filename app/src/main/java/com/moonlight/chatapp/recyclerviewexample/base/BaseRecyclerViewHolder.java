@@ -1,4 +1,4 @@
-package com.moonlight.chatapp.recyclerviewexample;
+package com.moonlight.chatapp.recyclerviewexample.base;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,5 +12,5 @@ public abstract class BaseRecyclerViewHolder<T extends BaseListItemBean> extends
         super(itemView);
     }
 
-    abstract void showData(BaseListItemBean data);
+    public abstract void showData(BaseListItemBean data);
 }

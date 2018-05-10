@@ -1,4 +1,4 @@
-package com.moonlight.chatapp.recyclerviewexample;
+package com.moonlight.chatapp.recyclerviewexample.bean;
 
 import java.io.Serializable;
 
