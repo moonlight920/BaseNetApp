@@ -31,13 +31,9 @@ dependencies {
 
     implementation libraries.supportv7
     implementation libraries.supportv4
-    implementation libraries.rxjava
-    implementation libraries.rxandroid
-    implementation libraries.retrofit
-    implementation libraries.retrofit_adapter
-    implementation libraries.retrofit_converter
     implementation libraries.logger
     implementation libraries.design
+    implementation libraries.glide
 
     implementation 'cn.bmob.android:bmob-sdk:3.5.5'
     implementation 'cn.jzvd:jiaozivideoplayer:6.2.9'

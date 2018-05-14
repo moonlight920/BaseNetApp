@@ -33,7 +33,6 @@
         <activity android:name=".DatabaseActivity" />
         <activity android:name=".StorageActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".FirebaseActivity" />
         <activity android:name=".RegisterActivity" />
 
         <service android:name=".UploadImgService" />

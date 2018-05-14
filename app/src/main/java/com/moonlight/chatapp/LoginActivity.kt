@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.EditText
 import com.moonlight.chatapp.utils.CheckUtil
 import kotlinx.android.synthetic.main.activity_login.*
@@ -72,20 +71,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun signIn(email: String, password: String) {
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithEmail:success")
-                        val user = mAuth.currentUser
-                        toast("Authentication success.")
-                        loginSuccess()
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail:failure", task.exception)
-                        toast("Authentication failed.")
-                    }
-                }
+
     }
 
     private fun loginSuccess() {

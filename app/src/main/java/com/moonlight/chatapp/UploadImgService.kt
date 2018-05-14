@@ -6,11 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
 import android.util.Log
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.moonlight.chatapp.utils.SharedPreferenceUtils
-import com.moonlight.chatapp.utils.ToastUtil
-import java.io.ByteArrayOutputStream
 
 
 /**
@@ -23,15 +19,10 @@ class UploadImgService : IntentService("UploadImgService") {
 
     val TAG = "UploadImgService"
 
-    private lateinit var storage: FirebaseStorage
-    private lateinit var mStorageRef: StorageReference
-
     private var mUsername: String = "tmp"
 
     override fun onCreate() {
         super.onCreate()
-        storage = FirebaseStorage.getInstance()
-        mStorageRef = storage.reference
         Log.d(TAG, "onCreate")
     }
 
@@ -95,29 +86,6 @@ class UploadImgService : IntentService("UploadImgService") {
     }
 
     private fun uploadBitmap(bm: Bitmap, name: String) {
-        val testRef = mStorageRef.child("images/$mUsername/$name.jpg")
 
-        val baos = ByteArrayOutputStream()
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val data = baos.toByteArray()
-
-        val uploadTask = testRef.putBytes(data)
-
-        uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
-            ToastUtil.show("failure")
-        }.addOnSuccessListener { taskSnapshot ->
-            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-            val downloadUrl = taskSnapshot.downloadUrl
-//            ToastUtil.show("success" + downloadUrl!!)
-            Log.d(TAG, "success" + name)
-            var oldList = SharedPreferenceUtils.get("uploadlist", "")
-            SharedPreferenceUtils.put("uploadlist", "$oldList,$name")
-            currentIndex++
-            upload()
-        }.addOnProgressListener { taskSnapshot ->
-            val progress = 100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount
-            println("Upload is $progress% done")
-        }.addOnPausedListener { println("Upload is paused") }
     }
 }

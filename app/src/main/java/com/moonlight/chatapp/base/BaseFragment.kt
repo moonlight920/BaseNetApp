@@ -6,21 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
 
 /**
  * Created by songyifeng on 2018/4/23.
  */
 abstract class BaseFragment : Fragment() {
-
-    protected lateinit var mAuth: FirebaseAuth
     protected val TAG = javaClass.name
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(getLayoutResId(), container, false)
         initView(view)
         loadData()
-        mAuth = FirebaseAuth.getInstance()
         return view
     }
 

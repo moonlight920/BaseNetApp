@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.EditText
 import com.moonlight.chatapp.utils.CheckUtil
 import kotlinx.android.synthetic.main.activity_register.*
@@ -99,19 +98,7 @@ class RegisterActivity : BaseActivity() {
     }
 
     private fun createAccount(email: String, password: String) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "createUserWithEmail:success")
-                        toast("createUserWithEmail:success")
-                        registerSuccess()
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                        toast("Authentication failed.")
-                    }
-                }
+
     }
 
     private fun registerSuccess() {

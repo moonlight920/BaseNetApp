@@ -7,8 +7,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
 import com.moonlight.chatapp.R
 import com.moonlight.chatapp.base.BaseFragment
@@ -25,9 +23,6 @@ import java.nio.charset.StandardCharsets
  */
 class HomeFragment : BaseFragment() {
 
-    private lateinit var storage: FirebaseStorage
-    private lateinit var mStorageRef: StorageReference
-
     private val dirPath = Environment.getExternalStorageDirectory().absolutePath + "/moonlight"
     private val jsonPath = "$dirPath/heihei.json"
 
@@ -43,9 +38,6 @@ class HomeFragment : BaseFragment() {
         textView = view.findViewById(R.id.textview)
         recyclerView = view.findViewById(R.id.recycler_view)
         btn_hidden = view.findViewById(R.id.btn_hidden)
-
-        storage = FirebaseStorage.getInstance()
-        mStorageRef = storage.reference
 
         btn_hidden.setOnClickListener(object : View.OnClickListener {
             //需要监听几次点击事件数组的长度就为几
@@ -101,18 +93,7 @@ class HomeFragment : BaseFragment() {
 
     private fun downloadFile() {
         val file = File(jsonPath)
-        val riversRef = mStorageRef.child("heihei.json")
 
-        riversRef.getFile(file)
-                .addOnSuccessListener({
-                    // Successfully downloaded data to local file
-                    // ...
-                    toast("download success")
-                    loadVideoData()
-                }).addOnFailureListener({
-                    // Handle failed download
-                    // ...
-                })
     }
 
     fun readToString(fileName: String): String {
