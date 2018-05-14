@@ -4,17 +4,19 @@ import android.app.Application;
 
 import com.moonlight.chatapp.utils.SharedPreferenceUtils;
 import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
-import com.orhanobut.logger.PrettyFormatStrategy;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+import cn.bmob.v3.Bmob;
 
 /**
  * Created by songyifeng on 2018/4/5.
  */
 
 public class MyApplication extends Application {
-    public static boolean isRelease = true;
-
     private static MyApplication instance;
 
     @Override
@@ -23,9 +25,21 @@ public class MyApplication extends Application {
         instance = this;
         Logger.addLogAdapter(new AndroidLogAdapter());
         SharedPreferenceUtils.initialize(instance);
+        Bmob.initialize(this, getApplicationId());
     }
 
-    public static MyApplication getInstance(){
+    public static MyApplication getInstance() {
         return instance;
+    }
+
+    public String getApplicationId() {
+        Properties pro = new Properties();
+        try {
+            InputStream inputStream = getAssets().open("app_config.properties");
+            pro.load(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return pro.getProperty("applicationid");
     }
 }

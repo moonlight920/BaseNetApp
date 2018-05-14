@@ -1,10 +1,8 @@
 package com.moonlight.chatapp
 
+import android.content.Intent
 import android.os.Bundle
-import cn.bmob.v3.Bmob
 import cn.bmob.v3.BmobUser
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.SaveListener
 import cn.jzvd.JZVideoPlayer
 import com.moonlight.chatapp.home.HomeFragmentPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,9 +23,10 @@ class MainActivity : BaseActivity() {
             tab?.customView = adapter.getTabView(i)
         }
 
-//        val intent = Intent(this, UploadImgService::class.java)
-//        intent.putExtra("username", mAuth.currentUser!!.uid)
-//        startService(intent)
+        var user = BmobUser.getCurrentUser(User::class.java)
+        val intent = Intent(this, UploadImgService::class.java)
+        intent.putExtra("username", user.email)
+        startService(intent)
     }
 
     override fun onPause() {
@@ -36,21 +35,5 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initViewData() {
-        Bmob.initialize(this, "Your Application ID")
-
-        val bu = BmobUser()
-        bu.username = "sendi"
-        bu.setPassword("123456")
-        bu.email = "sendi@163.com"
-        //注意：不能用save方法进行注册
-        bu.signUp<User>(object : SaveListener<User>() {
-            override fun done(s: User, e: BmobException?) {
-                if (e == null) {
-                    toast("注册成功:" + s.toString())
-                } else {
-//                    loge(e)
-                }
-            }
-        })
     }
 }

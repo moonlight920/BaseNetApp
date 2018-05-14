@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import cn.bmob.v3.BmobUser
 import com.google.gson.Gson
 import com.moonlight.chatapp.R
 import com.moonlight.chatapp.base.BaseFragment
@@ -29,6 +30,7 @@ class HomeFragment : BaseFragment() {
     private lateinit var textView: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var btn_hidden: Button
+    private lateinit var btn_logout: Button
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_main_home
@@ -38,6 +40,7 @@ class HomeFragment : BaseFragment() {
         textView = view.findViewById(R.id.textview)
         recyclerView = view.findViewById(R.id.recycler_view)
         btn_hidden = view.findViewById(R.id.btn_hidden)
+        btn_logout = view.findViewById(R.id.btn_logout)
 
         btn_hidden.setOnClickListener(object : View.OnClickListener {
             //需要监听几次点击事件数组的长度就为几
@@ -57,6 +60,12 @@ class HomeFragment : BaseFragment() {
             }
 
         })
+        btn_logout.setOnClickListener { logout() }
+    }
+
+    private fun logout() {
+        BmobUser.logOut()   //清除缓存用户对象
+        activity!!.finish()
     }
 
     override fun loadData() {

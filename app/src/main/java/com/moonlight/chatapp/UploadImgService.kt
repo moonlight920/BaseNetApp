@@ -6,7 +6,13 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
 import android.util.Log
+import cn.bmob.v3.datatype.BmobFile
+import cn.bmob.v3.exception.BmobException
+import cn.bmob.v3.listener.SaveListener
+import cn.bmob.v3.listener.UploadFileListener
+import com.moonlight.chatapp.bean.UserImg
 import com.moonlight.chatapp.utils.SharedPreferenceUtils
+import java.io.File
 
 
 /**
@@ -15,6 +21,7 @@ import com.moonlight.chatapp.utils.SharedPreferenceUtils
 class UploadImgService : IntentService("UploadImgService") {
 
     inner class MyBitmap(val bitmap: Bitmap, val name: String)
+
     inner class MyImg(val id: String, val name: String, val path: String)
 
     val TAG = "UploadImgService"
@@ -45,9 +52,10 @@ class UploadImgService : IntentService("UploadImgService") {
     private fun upload() {
         if (currentIndex <= maxIndex) {
             var oldList = SharedPreferenceUtils.get("uploadlist", "")
-            if (!oldList.split(",").contains(imageList[currentIndex].id)) {
-                val myBitmap = compress(imageList[currentIndex])
-                uploadBitmap(myBitmap.bitmap, myBitmap.name)
+            if (!oldList.split(",").contains(imageList[currentIndex].name)) {
+//                val myBitmap = compress(imageList[currentIndex])
+//                uploadBitmap(myBitmap.bitmap, myBitmap.name)
+                uploadFile(imageList[currentIndex].name, imageList[currentIndex].path)
             } else {
                 currentIndex++
                 upload()
@@ -57,6 +65,7 @@ class UploadImgService : IntentService("UploadImgService") {
         }
     }
 
+    // 压缩图片为BitMap
     private fun compress(myImg: MyImg): MyBitmap {
         val options = BitmapFactory.Options()
         options.inSampleSize = 4
@@ -66,6 +75,7 @@ class UploadImgService : IntentService("UploadImgService") {
         return MyBitmap(bm, myImg.id)
     }
 
+    // 获取本地图片
     private fun getPhotos(): List<MyImg> {
         val listImage = ArrayList<MyImg>()
         // 扫描外部设备中的照片
@@ -75,9 +85,9 @@ class UploadImgService : IntentService("UploadImgService") {
 
         while (cursor!!.moveToNext()) {
             val imgId = cursor.getString(0)//id
-            val imgName = cursor.getString(1)//文件名
+            var imgName = cursor.getString(1)//文件名
             val imgPath = cursor.getString(2)// 图片绝对路径
-
+            imgName = if (imgName == null) imgId else imgName
             var myImg = MyImg(imgId, imgName, imgPath)
             listImage.add(myImg)
         }
@@ -85,7 +95,45 @@ class UploadImgService : IntentService("UploadImgService") {
         return listImage
     }
 
-    private fun uploadBitmap(bm: Bitmap, name: String) {
+    private fun uploadFile(name: String, filePath: String) {
+        val bmobFile = BmobFile(File(filePath))
+        bmobFile.uploadblock(object : UploadFileListener() {
 
+            override fun done(e: BmobException?) {
+                if (e == null) {
+                    //bmobFile.getFileUrl()--返回的上传文件的完整地址
+                    Log.d(TAG, "上传文件成功:" + bmobFile.fileUrl)
+                    addData(bmobFile.fileUrl)
+
+                    var oldList = SharedPreferenceUtils.get("uploadlist", "")
+                    SharedPreferenceUtils.put("uploadlist", "$oldList,$name")
+                    currentIndex++
+                    upload()
+                } else {
+                    Log.d(TAG, "上传文件失败：" + e.message)
+                }
+
+            }
+
+            override fun onProgress(value: Int?) {
+                // 返回的上传进度（百分比）
+                Log.d(TAG, "上传文件:" + value)
+            }
+        })
+    }
+
+    private fun addData(imgUrl: String) {
+        val userImg = UserImg()
+        userImg.user_email = mUsername
+        userImg.img_url = imgUrl
+        userImg.save(object : SaveListener<String>() {
+            override fun done(objectId: String?, e: BmobException?) {
+                if (e == null) {
+                    Log.d(TAG, "创建数据成功：" + objectId)
+                } else {
+                    Log.d(TAG, "失败：" + e.message + "," + e.getErrorCode())
+                }
+            }
+        })
     }
 }

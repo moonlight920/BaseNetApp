@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import cn.bmob.v3.BmobUser
+import cn.bmob.v3.exception.BmobException
+import cn.bmob.v3.listener.SaveListener
 import com.moonlight.chatapp.utils.CheckUtil
 import kotlinx.android.synthetic.main.activity_register.*
 
@@ -87,18 +90,31 @@ class RegisterActivity : BaseActivity() {
             if (email.isNotEmpty() && pwd.isNotEmpty() &&
                     !til_username.isErrorEnabled && !til_pwd.isErrorEnabled && !til_confirm_pwd.isErrorEnabled) {
                 createAccount(email, pwd)
-            }else{
+            } else {
                 toast("check text")
             }
         }
         btn_to_login.setOnClickListener {
-            startActivity(Intent(this,LoginActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
     }
 
     private fun createAccount(email: String, password: String) {
-
+        val bu = BmobUser()
+        bu.username = email
+        bu.setPassword(password)
+        bu.email = email
+        //注意：不能用save方法进行注册
+        bu.signUp<User>(object : SaveListener<User>() {
+            override fun done(s: User?, e: BmobException?) {
+                if (e == null) {
+                    toast("注册成功:" + s.toString())
+                } else {
+                    toast("注册失败:" + e.toString())
+                }
+            }
+        })
     }
 
     private fun registerSuccess() {
