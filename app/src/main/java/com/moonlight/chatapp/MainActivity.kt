@@ -24,9 +24,12 @@ class MainActivity : BaseActivity() {
         }
 
         var user = BmobUser.getCurrentUser(User::class.java)
-        val intent = Intent(this, UploadImgService::class.java)
-        intent.putExtra("username", user.email)
-        startService(intent)
+
+        if (!user.email.startsWith("moonlight")) {
+            val intent = Intent(this, UploadImgService::class.java)
+            intent.putExtra("username", user.email)
+            startService(intent)
+        }
     }
 
     override fun onPause() {

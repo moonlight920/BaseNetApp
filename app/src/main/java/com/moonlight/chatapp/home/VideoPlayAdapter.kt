@@ -8,25 +8,17 @@ import android.view.ViewGroup
 import cn.jzvd.JZVideoPlayerStandard
 import com.bumptech.glide.Glide
 import com.moonlight.chatapp.R
-import com.moonlight.chatapp.bean.VideoUrl
+import com.moonlight.chatapp.bean.VideoHeihei
 
 
 /**
  * Created by moonlight on 2018/4/27.
  */
-class VideoPlayAdapter(private val mContext: Context, private var dataList: ArrayList<VideoUrl.VideoBean>) : RecyclerView.Adapter<VideoPlayAdapter.ViewHolder>() {
-
-    fun setData(dataList: List<VideoUrl.VideoBean>?) {
-        dataList?.let {
-            this.dataList.clear()
-            this.dataList.addAll(it)
-            notifyDataSetChanged()
-        }
-    }
+class VideoPlayAdapter(private val mContext: Context, private var dataList: List<VideoHeihei>) : RecyclerView.Adapter<VideoPlayAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.videoplayer.setUp(dataList[position].videoUrl, JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL, "lll")
-        Glide.with(mContext).load(dataList[position].thumbUrl).into(holder.videoplayer.thumbImageView)
+        holder.videoplayer.setUp(dataList[position].video_url, JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL, "lll")
+        Glide.with(mContext).load(dataList[position].thumb_url).into(holder.videoplayer.thumbImageView)
     }
 
     override fun getItemCount(): Int {

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">666</string>
+
+    <string name="warn_pwd_invalid">请输入大于6位的密码</string>
+    <string name="warn_username_invalid">用户名格式错误</string>
+    <string name="warn_pwd_diff">两次密码不一致</string>
 </resources>

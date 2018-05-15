@@ -21,7 +21,7 @@ class LoginActivity : BaseActivity() {
 
     override fun initViewData() {
         var editTextUsername: EditText = til_username.editText!!
-        til_username.hint = "UserName(Email)"
+        til_username.hint = "邮箱"
         editTextUsername.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
@@ -29,7 +29,7 @@ class LoginActivity : BaseActivity() {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.isNotEmpty() && !CheckUtil.isEmail(s)) {
-                    til_username.error = "Invalid UserName"
+                    til_username.error = getString(R.string.warn_username_invalid)
                     til_username.isErrorEnabled = true
                 } else {
                     til_username.isErrorEnabled = false
@@ -42,7 +42,7 @@ class LoginActivity : BaseActivity() {
         })
 
         var editTextPwd: EditText = til_pwd.editText!!
-        til_pwd.hint = "Password"
+        til_pwd.hint = "密码"
         editTextPwd.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
@@ -50,7 +50,7 @@ class LoginActivity : BaseActivity() {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.isNotEmpty() && s.length < 6) {
-                    til_pwd.error = "Invalid password"
+                    til_pwd.error = getString(R.string.warn_pwd_invalid)
                     til_pwd.isErrorEnabled = true
                 } else {
                     til_pwd.isErrorEnabled = false

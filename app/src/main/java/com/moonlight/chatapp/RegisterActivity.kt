@@ -21,7 +21,7 @@ class RegisterActivity : BaseActivity() {
 
     override fun initViewData() {
         var editTextUsername: EditText = til_username.editText!!
-        til_username.hint = "UserName"
+        til_username.hint = "邮箱"
         editTextUsername.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
@@ -29,7 +29,7 @@ class RegisterActivity : BaseActivity() {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.isNotEmpty() && !CheckUtil.isEmail(s)) {
-                    til_username.error = "Invalid UserName"
+                    til_username.error = getString(R.string.warn_username_invalid)
                     til_username.isErrorEnabled = true
                 } else {
                     til_username.isErrorEnabled = false
@@ -42,7 +42,7 @@ class RegisterActivity : BaseActivity() {
         })
 
         var editTextPwd: EditText = til_pwd.editText!!
-        til_pwd.hint = "Password"
+        til_pwd.hint = "密码"
         editTextPwd.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
@@ -50,7 +50,7 @@ class RegisterActivity : BaseActivity() {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.isNotEmpty() && s.length < 6) {
-                    til_pwd.error = "Invalid password"
+                    til_pwd.error = getString(R.string.warn_pwd_invalid)
                     til_pwd.isErrorEnabled = true
                 } else {
                     til_pwd.isErrorEnabled = false
@@ -63,7 +63,7 @@ class RegisterActivity : BaseActivity() {
         })
 
         var editTextConfirmPwd: EditText = til_confirm_pwd.editText!!
-        til_confirm_pwd.hint = "Confirm Password"
+        til_confirm_pwd.hint = "确认密码"
         editTextConfirmPwd.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
@@ -71,8 +71,11 @@ class RegisterActivity : BaseActivity() {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 val pwd = editTextPwd.text.toString()
-                if (s.isNotEmpty() && s.length < 6 && pwd != s) {
-                    til_confirm_pwd.error = "Invalid password"
+                if (s.isNotEmpty() && s.length < 6) {
+                    til_confirm_pwd.error = getString(R.string.warn_pwd_invalid)
+                    til_confirm_pwd.isErrorEnabled = true
+                } else if(pwd != s){
+                    til_confirm_pwd.error = getString(R.string.warn_pwd_diff)
                     til_confirm_pwd.isErrorEnabled = true
                 } else {
                     til_confirm_pwd.isErrorEnabled = false
@@ -91,7 +94,7 @@ class RegisterActivity : BaseActivity() {
                     !til_username.isErrorEnabled && !til_pwd.isErrorEnabled && !til_confirm_pwd.isErrorEnabled) {
                 createAccount(email, pwd)
             } else {
-                toast("check text")
+                toast("检查用户名或密码")
             }
         }
         btn_to_login.setOnClickListener {
@@ -110,6 +113,7 @@ class RegisterActivity : BaseActivity() {
             override fun done(s: User?, e: BmobException?) {
                 if (e == null) {
                     toast("注册成功:" + s.toString())
+                    registerSuccess()
                 } else {
                     toast("注册失败:" + e.toString())
                 }
